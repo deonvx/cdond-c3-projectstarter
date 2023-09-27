@@ -114,12 +114,12 @@ jobs:
           keys: [frontend-build]
       # Your job code here
       - run:
-        name: Scan frontend
-        command: |
-          cd frontend
-          npm install
-      ## npm install oauth-sign@^0.9.0
-          npm audit --audit-level=critical
+          name: Scan frontend
+          command: |
+            cd frontend
+            npm install
+        ## npm install oauth-sign@^0.9.0
+            npm audit --audit-level=critical
 
   scan-backend:
     docker:
@@ -133,12 +133,12 @@ jobs:
           keys: [backend-build]
       # Your job code here
       - run:
-        name: Scan backend
-        command: |
-          cd backend
-          npm install
-      ## npm install oauth-sign@^0.9.0
-          npm audit --audit-level=critical
+          name: Scan backend
+          command: |
+            cd backend
+            npm install
+        ## npm install oauth-sign@^0.9.0
+            npm audit --audit-level=critical
 
   # deploy-infrastructure:
   #   docker:
