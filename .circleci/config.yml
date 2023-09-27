@@ -72,19 +72,8 @@ jobs:
       # Docker image here
       - image: circleci/node:13.8.0
     steps:
-      # Checkout code from git
-      - checkout
-      # Restore from cache
-      - restore_cache:
-          keys: [frontend-build]
-      # Your job code here
-      - run:
-          name: Run frontend test
-          command: |
-            cd frontend 
-            npm install
-            npm run test
       - slack/notify:
+          event: always
           channel: C05KG6G2EG0
           custom: |
             {
@@ -101,7 +90,19 @@ jobs:
                 }
               ]
             }
-          event: always
+      # Checkout code from git
+      - checkout
+      # Restore from cache
+      - restore_cache:
+          keys: [frontend-build]
+      # Your job code here
+      - run:
+          name: Run frontend test
+          command: |
+            cd frontend 
+            npm install
+            npm run test
+
   test-backend:
     docker:
       # Docker image here
@@ -334,10 +335,13 @@ workflows:
           context: slack-secrets
       - test-backend:
           requires: [build-backend]
+          context: slack-secrets
       - scan-backend:
           requires: [build-backend]
+          context: slack-secrets
       - scan-frontend:
           requires: [build-frontend]
+          context: slack-secrets
       # - deploy-infrastructure:
       #     requires: [test-frontend, test-backend, scan-frontend, scan-backend]
       #     filters:
