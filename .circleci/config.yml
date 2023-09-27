@@ -85,6 +85,7 @@ jobs:
             npm install
             npm run test
       - slack/notify:
+          channel: project
           custom: |
             {
               "blocks": [
