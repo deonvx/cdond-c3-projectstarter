@@ -76,7 +76,7 @@ jobs:
       - checkout
       # Restore from cache
       - restore_cache:
-          keys: [frontend-build]
+          keys: [build-frontend]
       # Your job code here
       - run:
           name: unit tests
