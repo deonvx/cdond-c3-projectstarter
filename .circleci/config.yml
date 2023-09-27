@@ -85,9 +85,22 @@ jobs:
             npm install
             npm run test
       - slack/notify:
-          channel: project
-          event: fail
-          template: basic_fail_1
+          custom: |
+            {
+              "blocks": [
+                {
+                  "type": "section",
+                  "fields": [
+                    {
+                      "type": "plain_text",
+                      "text": "*This is a text notification*",
+                      "emoji": true
+                    }
+                  ]
+                }
+              ]
+            }
+          event: always
   test-backend:
     docker:
       # Docker image here
