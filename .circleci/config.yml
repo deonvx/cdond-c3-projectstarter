@@ -72,24 +72,6 @@ jobs:
       # Docker image here
       - image: node:18
     steps:
-      - slack/notify:
-          event: always
-          channel: C05KG6G2EG0
-          custom: |
-            {
-              "blocks": [
-                {
-                  "type": "section",
-                  "fields": [
-                    {
-                      "type": "plain_text",
-                      "text": "*This is a text notification*",
-                      "emoji": true
-                    }
-                  ]
-                }
-              ]
-            }
       # Checkout code from git
       - checkout
       # Restore from cache
@@ -145,6 +127,24 @@ jobs:
       # Docker image here
       - image: node:18
     steps:
+      - slack/notify:
+          event: always
+          channel: C05KG6G2EG0
+          custom: |
+            {
+              "blocks": [
+                {
+                  "type": "section",
+                  "fields": [
+                    {
+                      "type": "plain_text",
+                      "text": "*This is a text notification*",
+                      "emoji": true
+                    }
+                  ]
+                }
+              ]
+            }
       # Checkout code from git
       - checkout
       # Restore from cache
