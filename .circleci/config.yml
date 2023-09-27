@@ -80,8 +80,8 @@ jobs:
       # Your job code here
       - run:
           name: unit tests
-          commands: |
-            cd frontend
+          command: |
+            cd frontend 
             npm install
             npm run test
                 
