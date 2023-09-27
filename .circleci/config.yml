@@ -36,7 +36,7 @@ commands:
 jobs:
   build-frontend:
     docker:
-      - image: circleci/node:13.8.0
+      - image: circleci/node:18
     steps:
       - checkout
       - restore_cache:
@@ -53,7 +53,7 @@ jobs:
 
   build-backend:
     docker:
-      - image: circleci/node:13.8.0
+      - image: circleci/node:18
     steps:
       - checkout
       - restore_cache:
@@ -70,7 +70,7 @@ jobs:
   test-frontend:
     docker:
       # Docker image here
-      - image: circleci/node:13.8.0
+      - image: circleci/node:18
     steps:
       - slack/notify:
           event: always
@@ -106,7 +106,7 @@ jobs:
   test-backend:
     docker:
       # Docker image here
-      - image: circleci/node:13.8.0
+      - image: circleci/node:18
     steps:
       # Checkout code from git
       # Restore from cache
@@ -124,7 +124,7 @@ jobs:
   scan-frontend:
     docker:
       # Docker image here
-      - image: circleci/node:13.8.0
+      - image: circleci/node:18
     steps:
       # Checkout code from git
       # Restore from cache
@@ -143,7 +143,7 @@ jobs:
   scan-backend:
     docker:
       # Docker image here
-      - image: circleci/node:13.8.0
+      - image: circleci/node:18
     steps:
       # Checkout code from git
       - checkout
