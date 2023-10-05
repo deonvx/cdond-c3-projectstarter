@@ -181,11 +181,26 @@ jobs:
               --tags project=udapeople \
               --stack-name "udapeople-frontend-${CIRCLE_WORKFLOW_ID:0:7}" \
               --parameter-overrides ID="CIRCLE_WORKFLOW_ID:0:7"
+
+      - destroy-enviroment:
+          workflow_id: ${CIRCLE_WORKFLOW_ID:0:7}
+   upload_file:
+      docker:
+        - image: circleci/node:13.8.0
+    steps:
+      # Checkout code from git
+      - checkout
+      - aws-cli/setup         
       - run:
           name: Add back-end ip to ansible inventory
           command: |
             # Your code here
-            exit 1
+              aws ec2 describe-instances  \
+              --query 'Reservations[*].Instances[*].PublicIpAddress' \
+              --output text >> .circleci/ansible/inventory.txt
+            cat .circleci/ansible/inventory.txt
+            # exit 1
+
       - persist_to_workspace:
           root: ~/
           paths:
