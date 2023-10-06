@@ -130,7 +130,7 @@ jobs:
             cd frontend
             npm install
             ## npm install oauth-sign@^0.9.0
-            npm audit fix
+            npm audit fix -force
 
   scan-backend:
     docker:
