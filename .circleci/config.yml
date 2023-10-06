@@ -115,8 +115,11 @@ jobs:
             
   scan-frontend:
     docker:
-      # Docker image here
-      - image: node:18
+      # # Docker image here
+      # - image: node:18
+    executor:
+      name: node/default
+      tag: '13.8.0'
     steps:
       # Checkout code from git
       # Restore from cache
