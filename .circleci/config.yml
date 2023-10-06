@@ -208,8 +208,8 @@ jobs:
               --stack-name "udapeople-frontend-${CIRCLE_WORKFLOW_ID:0:7}" \
               --parameter-overrides ID="CIRCLE_WORKFLOW_ID:0:7"
 
-      # - destroy-enviroment:
-      #     workflow_id: ${CIRCLE_WORKFLOW_ID:0:7}
+      - destroy-enviroment:
+          workflow_id: ${CIRCLE_WORKFLOW_ID:0:7}
 
   # upload_file:
   #   docker:
@@ -240,19 +240,28 @@ jobs:
       - image: python:3.7-alpine3.11
     steps:
       # Checkout code from git
+      - checkout
       # Add ssh keys with fingerprint
+      - aws-cli-setup
       # attach workspace
+      # - add_ssh_keys:
+      #     fingerprints: []
+      - attach_workspace:
+          at: ~/
       - run:
           name: Install dependencies
           command: |
-            # Your code here
-            exit 1
+            apk add --update ansible
       - run:
           name: Configure server
           command: |
-            # Your code here
-            exit 1
+            pwd
+            ls -la
+            cat .circleci/ansible/inventory.txt 
+            ansible-playbook -i .circleci/ansible/inventory.txt .circleci/ansible/configure-server.yml
       # Here's where you will add some code to rollback on failure      
+      - destroy-enviroment:
+          workflow_id: ${CIRCLE_WORKFLOW_ID:0:7}
 
   # run-migrations:
   #   docker:
