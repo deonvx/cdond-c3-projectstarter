@@ -62,8 +62,11 @@ jobs:
       #     template: success_tagged_deploy_1
 
   build-backend:
-    docker:
-      - image: node:18
+    # docker:
+    #   - image: node:18
+    executor:
+      name: node/default
+      tag: '13.8.0'
     steps:
       - checkout
       - restore_cache:
@@ -135,12 +138,17 @@ jobs:
             cd frontend
             npm install
             ## npm install oauth-sign@^0.9.0
-            npm audit fix -force
+            npm audit fix --audit-level=critical --force
+            npm audit fix --force
+            npm audit --audit-level=critical
 
   scan-backend:
-    docker:
-      # Docker image here
-      - image: node:18
+    # docker:
+    #   # Docker image here
+    #   - image: node:18
+    executor:
+      name: node/default
+      tag: '13.8.0'
     steps:
       - slack/notify:
           event: always
@@ -172,6 +180,8 @@ jobs:
             cd backend
             npm install
             ## npm install oauth-sign@^0.9.0
+            npm audit fix --audit-level=critical --force
+            npm audit fix --force
             npm audit --audit-level=critical
 
   deploy-infrastructure:
