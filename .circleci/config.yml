@@ -114,7 +114,7 @@ jobs:
             npm run build
             
   scan-frontend:
-    docker:
+    # docker:
       # # Docker image here
       # - image: node:18
     executor:
