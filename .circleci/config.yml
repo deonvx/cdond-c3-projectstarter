@@ -267,23 +267,57 @@ jobs:
       - destroy-environment:
           workflow_id: ${CIRCLE_WORKFLOW_ID:0:7}
 
-  # run-migrations:
-  #   docker:
-  #     # Docker image here that supports NodeJS
-  #   steps:
-  #     # Checkout code from git
-  #     - run:
-  #         name: Run migrations
-  #         command: |
-  #           # Your code here
-  #           exit 1
-  #     - run:
-  #         name: Send migration results to memstash
-  #         command: |
-  #           # Your code here
-  #           exit 1
-  #    # Here's where you will add some code to rollback on failure      
+  run-migrations:
+    docker:
+      # Docker image here that supports NodeJS
+      - image: circleci/node:13.8.0
+    steps:
+      # Checkout code from git
+      - checkout
+      - aws-cli/setup
+      - run:
+          name: Run migrations
+          command: |
+            cd backend
+            npm install
+            # Run and save the migration output
+            npm run migrations > migrations_dump.txt
+      - run:
+          name: "Install redis-cli"
+          command: |
+            cd backend
+            if cat migrations_dump.txt | grep "No migrations are pending"
+            then
+              echo "Skip Redis installation phase"
+              exit 0
+            fi
+            # no error if existing, make parent directories as needed
+            mkdir --parents ~/tmp
+            cd ~/tmp
+            wget http://download.redis.io/redis-stable.tar.gz
+            tar xvzf redis-stable.tar.gz
+            cd redis-stable
+            make
+            sudo cp src/redis-cli /usr/local/bin/
+            sudo chmod 755 /usr/local/bin/redis-cli
+      - run:
+          name: Send migration results to redis-cloud
+          command: |
+            cd $(eval echo "$CIRCLE_WORKING_DIRECTORY/$PROJECT_ROOT_DIR/backend")
 
+            if cat migrations_dump.txt | grep "has been executed successfully."
+            then
+              redis-cli \
+                -h redis-14871.c80.us-east-1-2.ec2.cloud.redislabs.com \
+                -p 14871 \
+                --user default \
+                --pass ecBcgQIich3FefeFiqQvUdJUaK96WVck \
+              SET migration_${CIRCLE_WORKFLOW_ID:0:7} 1
+            fi
+
+            echo "No migration has been executed."
+     # Here's where you will add some code to rollback on failure    
+     
   # deploy-frontend:
   #   docker:
   #     # Docker image here that supports AWS CLI
@@ -405,8 +439,8 @@ workflows:
             branches:
               only:
                 - master
-      # - run-migrations:
-      #     requires: [configure-infrastructure]
+      - run-migrations:
+          requires: [configure-infrastructure]
       # - deploy-frontend:
       #     requires: [run-migrations]
       # - deploy-backend:
