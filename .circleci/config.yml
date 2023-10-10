@@ -249,7 +249,7 @@ jobs:
       - aws-cli/setup
       # attach workspace
       - add_ssh_keys:
-          fingerprints: [ae:ec:89:55:3f:bc:3f:14:a9:bc:86:74:ed:c5:57:ea:1b:ea:83:d1]
+          fingerprints: ["ae:ec:89:55:3f:bc:3f:14:a9:bc:86:74:ed:c5:57:ea:1b:ea:83:d1"]
       - attach_workspace:
           at: ~/
       - run:
@@ -281,7 +281,7 @@ jobs:
             cd backend
             npm install
             # Run and save the migration output
-            npm run migrations
+            npm run migrations > migrations_dump.txt
       - run:
           name: "Install redis-cli"
           command: |
