@@ -317,7 +317,7 @@ jobs:
 
             echo "No migration has been executed."
      # Here's where you will add some code to rollback on failure    
-     
+
   # deploy-frontend:
   #   docker:
   #     # Docker image here that supports AWS CLI
@@ -441,6 +441,10 @@ workflows:
                 - master
       - run-migrations:
           requires: [configure-infrastructure]
+          filters:
+            branches:
+              only:
+                - master
       # - deploy-frontend:
       #     requires: [run-migrations]
       # - deploy-backend:
