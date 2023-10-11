@@ -435,6 +435,12 @@ workflows:
             branches:
               only:
                 - master
+      - upload_file:
+          requires: [deploy-infrastructure]
+          filters:
+            branches:
+              only:
+                - master
       - configure-infrastructure:
           requires: [deploy-infrastructure, upload_file]
           filters:
