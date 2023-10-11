@@ -490,7 +490,7 @@ workflows:
                 - master
       - deploy-backend:
           requires: [run-migrations]
-            filters:
+          filters:
             branches:
               only:
                 - master
