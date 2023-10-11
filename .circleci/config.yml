@@ -23,21 +23,48 @@ commands:
   revert-migrations:
     description: Revert the last migration if successfully run in the current workflow.
     parameters:
-      # Add parameter here     
+      # Add parameter here   
+      migrations-key:
+        type: string
+      when: 
+        type: string
+        default: "on_fail"
     steps:
       - run:
-          name: Revert migrations
-          # Add when this will run
+          name: "Install redis-cli"
+          when: << parameters.when >>
           command: |
-            # Curl command here to see if there was a successful migration associated with the workflow id, store result in SUCCESS variable
-            SUCCESS = 1
-            if(( $SUCCESS==1 )); 
-            then
-            #  cd ~/project/backend
-            #  npm install
-            #  Add revert code here. You can find this in the Getting Started section.
-              exit 1
-            fi
+            # no error if existing, make parent directories as needed
+            mkdir --parents ~/tmp
+            cd ~/tmp
+            # Download and install redis-cli
+            wget http://download.redis.io/redis-stable.tar.gz
+            tar xvzf redis-stable.tar.gz
+            cd redis-stable
+            make
+            # Copy to bin and change mode
+            sudo cp src/redis-cli /usr/local/bin/
+            sudo chmod 755 /usr/local/bin/redis-cli
+      - run:
+          name: "Revert migrations if fail"
+          when: << parameters.when >>
+          environment:
+            PARAM_MIGRATIONS_KEY: <<parameters.migrations-key>>
+          command: |
+            SUCCESS=$(
+              redis-cli \
+                -h redis-14871.c80.us-east-1-2.ec2.cloud.redislabs.com \
+                -p 14871 \
+                --user default \
+                --pass ecBcgQIich3FefeFiqQvUdJUaK96WVck \
+              GET $PARAM_MIGRATIONS_KEY
+            )
+
+            cd backend
+            # Install dependencies
+            npm install
+            # Revert migration on fail
+            npm run migrations:revert
             
 jobs:
   build-frontend:
