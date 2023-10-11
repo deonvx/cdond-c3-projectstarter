@@ -215,28 +215,28 @@ jobs:
       - destroy-environment:
           workflow_id: ${CIRCLE_WORKFLOW_ID:0:7}
 
-  # upload_file:
-  #   docker:
-  #     - image: circleci/node:13.8.0
-  #   steps:
-  #     # Checkout code from git
-  #     - checkout
-  #     - aws-cli/setup         
-  #     - run:
-  #         name: Add back-end ip to ansible inventory
-  #         command: |
-  #           # Your code here
-  #             aws ec2 describe-instances  \
-  #             --query 'Reservations[*].Instances[*].PublicIpAddress' \
-  #             --output text >> .circleci/ansible/inventory.txt
-  #           cat .circleci/ansible/inventory.txt
-  #           # exit 1
+  upload_file:
+    docker:
+      - image: circleci/node:14.17.0
+    steps:
+      # Checkout code from git
+      - checkout
+      - aws-cli/setup         
+      - run:
+          name: Add back-end ip to ansible inventory
+          command: |
+            # Your code here
+              aws ec2 describe-instances  \
+              --query 'Reservations[*].Instances[*].PublicIpAddress' \
+              --output text >> .circleci/ansible/inventory.txt
+            cat .circleci/ansible/inventory.txt
+            # exit 1
 
-  #     - persist_to_workspace:
-  #         root: ~/
-  #         paths:
-  #           - project/.circleci/ansible/inventory.txt
-      # Here's where you will add some code to rollback on failure      
+      - persist_to_workspace:
+          root: ~/
+          paths:
+            - project/.circleci/ansible/inventory.txt
+      Here's where you will add some code to rollback on failure      
 
   configure-infrastructure:
     docker:
@@ -436,7 +436,7 @@ workflows:
               only:
                 - master
       - configure-infrastructure:
-          requires: [deploy-infrastructure]
+          requires: [deploy-infrastructure, upload_file]
           filters:
             branches:
               only:
