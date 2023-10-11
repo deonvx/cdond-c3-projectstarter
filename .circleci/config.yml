@@ -170,7 +170,7 @@ jobs:
             npm install
             ## npm install oauth-sign@^0.9.0
             npm audit fix --audit-level=critical --force
-        #  npm audit fix --force
+            npm audit fix --force
             npm audit --audit-level=critical
 
   scan-backend:
@@ -212,7 +212,7 @@ jobs:
             npm install
             ## npm install oauth-sign@^0.9.0
             npm audit fix --audit-level=critical --force
-            npm audit fix --force
+          # npm audit fix --force
             npm audit --audit-level=critical
 
   deploy-infrastructure:
