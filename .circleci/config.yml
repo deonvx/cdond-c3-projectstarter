@@ -181,24 +181,6 @@ jobs:
       name: node/default
       tag: '14.17'
     steps:
-      - slack/notify:
-          event: always
-          channel: C05KG6G2EG0
-          custom: |
-            {
-              "blocks": [
-                {
-                  "type": "section",
-                  "fields": [
-                    {
-                      "type": "plain_text",
-                      "text": "*Failed in build #40*",
-                      "emoji": true
-                    }
-                  ]
-                }
-              ]
-            }
       # Checkout code from git
       - checkout
       # Restore from cache
@@ -212,6 +194,7 @@ jobs:
             npm install
             ## npm install oauth-sign@^0.9.0
             npm audit fix --audit-level=critical --force
+            npm audit fix --force
             npm audit --audit-level=critical
 
   deploy-infrastructure:
