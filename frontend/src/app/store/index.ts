@@ -1,33 +1,36 @@
-import { Store, createStore, applyMiddleware } from 'redux';
-import { composeWithDevTools } from 'redux-devtools-extension';
-import { History } from 'history';
-import { connectRouter, routerMiddleware } from 'connected-react-router';
-import { logger } from 'app/middleware';
-import { RootState, rootReducer } from 'app/reducers';
-import thunk from 'redux-thunk';
+import React from 'react';
+import { Route, Switch, Redirect, RouteComponentProps } from 'react-router';
+import App from './containers/App';
+import { hot } from 'react-hot-loader';
+import './style.local.css';
 
-export function configureStore(
-  history: History,
-  initialState?: RootState,
-): Store<RootState> {
-  let middleware = applyMiddleware(logger, thunk, routerMiddleware(history));
+export interface Props {}
 
-  if (process.env.NODE_ENV !== 'production') {
-    middleware = composeWithDevTools(middleware);
-  }
-
-  const store = createStore(
-    connectRouter(history)(rootReducer) as any,
-    initialState as any,
-    middleware,
-  ) as Store<RootState>;
-
-  if (module.hot) {
-    module.hot.accept('app/reducers', () => {
-      const nextReducer = require('app/reducers');
-      store.replaceReducer(nextReducer);
-    });
-  }
-
-  return store;
+export interface State {
+  showLoader: boolean;
 }
+export class Root extends React.Component<Props, State> {
+  state = {
+    showLoader: true,
+  };
+
+  componentDidMount() {
+    setTimeout(() => this.setState({ showLoader: false }), 1000);
+  }
+  render() {
+    return (
+      <div>
+        <Switch>
+          <Route exact path="/" render={() => <Redirect to="/employees" />} />
+          <Route
+            render={(props: RouteComponentProps<void>) => {
+              return <App {...props} />;
+            }}
+          />
+        </Switch>
+      </div>
+    );
+  }
+}
+
+export default hot(module)(Root);
