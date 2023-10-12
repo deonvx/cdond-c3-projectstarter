@@ -131,8 +131,6 @@ jobs:
             - project/artifact-backend.tar.gz
       - save_cache:
           paths: [backend/node_modules]
-          key: backend-build
-
   test-frontend:
     # docker:
     #   # Docker image here
