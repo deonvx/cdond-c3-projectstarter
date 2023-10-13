@@ -8,6 +8,9 @@ import history from './browserHistory';
 
 // prepare store
 const store = configureStore(history);
+const providerProps: ProviderProps = {
+  store: store,
+};
 
 ReactDOM.render(
   <Provider {... providerProps}>
