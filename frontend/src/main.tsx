@@ -1,6 +1,6 @@
 import * as React from 'react';
 import * as ReactDOM from 'react-dom';
-import { Provider } from 'react-redux';
+import { Provider, ProviderProps } from 'react-redux';
 import { ConnectedRouter } from 'connected-react-router';
 import { configureStore } from 'app/store';
 import Root from './app';
