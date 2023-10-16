@@ -78,9 +78,9 @@ jobs:
           name: Build front-end
           command: |
             cd frontend
-            yarn install
-            yarn update
-            yarn i typescript@latest
+            yarn
+            yarn upgrade
+            yarn add typescript@latest
             yarn run build
       - save_cache:
           paths: [frontend/node_modules]
