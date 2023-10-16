@@ -1,6 +1,6 @@
-import { createHashHistory } from 'history';
+import { History, createHashHistory } from 'history';
 
-const history = createHashHistory({
+const history: History = createHashHistory({
   hashType: 'slash',
 });
 

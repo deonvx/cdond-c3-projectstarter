@@ -12,6 +12,7 @@ export namespace Button {
     title?: string;
     disabled?: boolean;
     type?: any;
+    children: any;
   }
 }
 
