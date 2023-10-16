@@ -17,6 +17,7 @@ export function configureStore(
   }
 
   const store = createStore(
+    // @ts-ignore
     connectRouter(history)(rootReducer) as any,
     initialState as any,
     middleware,
