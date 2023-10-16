@@ -14,6 +14,7 @@ const providerProps: ProviderProps = {
 
 ReactDOM.render(
   <Provider {... providerProps}>
+    {/* @ts-ignore */}
     <ConnectedRouter history={history}>
       <Root />
     </ConnectedRouter>
