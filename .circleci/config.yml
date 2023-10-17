@@ -81,6 +81,7 @@ jobs:
             yarn
             yarn upgrade
             yarn add typescript@latest
+            yarn add @types/jest@latest
             yarn run build
       - save_cache:
           paths: [frontend/node_modules]
