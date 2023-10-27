@@ -30,21 +30,21 @@ commands:
         type: string
         default: "on_fail"
     steps:
-      # - run:
-      #     name: "Install redis-cli"
-      #     when: << parameters.when >>
-      #     command: |
-      #       # no error if existing, make parent directories as needed
-      #       mkdir --parents ~/tmp
-      #       cd ~/tmp
-      #       # Download and install redis-cli
-      #       wget http://download.redis.io/redis-stable.tar.gz
-      #       tar xvzf redis-stable.tar.gz
-      #       cd redis-stable
-      #       make
-      #       # Copy to bin and change mode
-      #       sudo cp src/redis-cli /usr/local/bin/
-      #       sudo chmod 755 /usr/local/bin/redis-cli
+      - run:
+          name: "Install redis-cli"
+          when: << parameters.when >>
+          command: |
+            # no error if existing, make parent directories as needed
+            mkdir --parents ~/tmp
+            cd ~/tmp
+            # Download and install redis-cli
+            wget http://download.redis.io/redis-stable.tar.gz
+            tar xvzf redis-stable.tar.gz
+            cd redis-stable
+            make
+            # Copy to bin and change mode
+            sudo cp src/redis-cli /usr/local/bin/
+            sudo chmod 755 /usr/local/bin/redis-cli
       - run:
           name: "Revert migrations if fail"
           when: << parameters.when >>
@@ -53,10 +53,10 @@ commands:
           command: |
             SUCCESS=$(
               redis-cli \
-                -h redis-14871.c80.us-east-1-2.ec2.cloud.redislabs.com \
-                -p 14871 \
+                -h redis-11369.c12.us-east-1-4.ec2.cloud.redislabs.com \
+                -p 11369 \
                 --user default \
-                --pass ecBcgQIich3FefeFiqQvUdJUaK96WVck \
+                --pass 48jS8AReTCd0rNEFzcYlyidtbTtUBfe9 \
               GET $PARAM_MIGRATIONS_KEY
             )
 
