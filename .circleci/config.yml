@@ -30,21 +30,21 @@ commands:
         type: string
         default: "on_fail"
     steps:
-      - run:
-          name: "Install redis-cli"
-          when: << parameters.when >>
-          command: |
-            # no error if existing, make parent directories as needed
-            mkdir --parents ~/tmp
-            cd ~/tmp
-            # Download and install redis-cli
-            wget http://download.redis.io/redis-stable.tar.gz
-            tar xvzf redis-stable.tar.gz
-            cd redis-stable
-            make
-            # Copy to bin and change mode
-            sudo cp src/redis-cli /usr/local/bin/
-            sudo chmod 755 /usr/local/bin/redis-cli
+      # - run:
+      #     name: "Install redis-cli"
+      #     when: << parameters.when >>
+      #     command: |
+      #       # no error if existing, make parent directories as needed
+      #       mkdir --parents ~/tmp
+      #       cd ~/tmp
+      #       # Download and install redis-cli
+      #       wget http://download.redis.io/redis-stable.tar.gz
+      #       tar xvzf redis-stable.tar.gz
+      #       cd redis-stable
+      #       make
+      #       # Copy to bin and change mode
+      #       sudo cp src/redis-cli /usr/local/bin/
+      #       sudo chmod 755 /usr/local/bin/redis-cli
       - run:
           name: "Revert migrations if fail"
           when: << parameters.when >>
