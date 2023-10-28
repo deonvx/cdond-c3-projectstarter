@@ -314,7 +314,7 @@ jobs:
             cd backend
             # npm cache clean
             # rm -rf node_modules
-            npm install --legacy-peer-deps
+            npm install
             # sudo npm install -g typescript
             # npm audit fix --force
             # Run and save the migration output
