@@ -315,7 +315,7 @@ jobs:
             # npm cache clean
             # rm -rf node_modules
             npm install
-            sudo npm install -g typescript
+            # sudo npm install -g typescript
             # npm audit fix --force
             # Run and save the migration output
             npm run migrations > migrations_dump.txt
@@ -350,9 +350,11 @@ jobs:
                 --user default \
                 --pass ecBcgQIich3FefeFiqQvUdJUaK96WVck \
               SET ${CIRCLE_WORKFLOW_ID:0:7} 1
+            else
+              echo "No migration has been executed."
+              exit 1
             fi
 
-            echo "No migration has been executed."
      # Here's where you will add some code to rollback on failure
       - destroy-environment:
           workflow_id: ${CIRCLE_WORKFLOW_ID:0:7}
@@ -483,6 +485,17 @@ jobs:
       # Checkout code from git
       - checkout
       - run:
+          name: Get old stack workflow id
+          command: |
+            # your code here
+            export OldWorkflowID=$(aws cloudformation \
+                list-exports --query "Exports[?Name==\`WorkflowID\`].Value" \
+                --no-paginate --output text) >> $BASH_ENV
+      - persist_to_workspace:
+          root: .
+          paths:
+            - bash.env
+      - run:
           name: Update cloudfront distribution
           command: |
              aws cloudformation deploy \
@@ -501,33 +514,31 @@ jobs:
       - image: cimg/aws:2023.09
     steps:
       # Checkout code from git
+      - attach_workspace:
+          at: .
+      - run: |
+          cat bash.env >> $BASH_ENV
       - checkout
       - run:
           name: Get old stack workflow id
           command: |
             # your code here
-            export OldWorkflowID=$(aws cloudformation \
-                list-exports --query "Exports[?Name==\`WorkflowID\`].Value" \
-                --no-paginate --output text)
-              
             echo OldWorkflowID: "${OldWorkflowID}"
             echo CIRCLE_WORKFLOW_ID "${CIRCLE_WORKFLOW_ID:0:7}"
             export STACKS=($(aws cloudformation list-stacks --query "StackSummaries[*].StackName" \
               --stack-status-filter CREATE_COMPLETE --no-paginate --output text)) 
             echo Stack names: "${STACKS[@]}"   
-            # export STACKS=[] #put the list of stacks here
         
       - run:
           name: Remove old stacks and files
           command: |
-            if [[ "${STACKS[@]}" =~ "${OldWorkflowID}" ]]; then
-                # Find and print the matching element
-                for element in "${STACKS[@]}"; do
-                    if [[ "$element" == "${OldWorkflowID}" ]]; then
-                        aws cloudformation delete-stack --stack-name ${element}
-                    fi
-                done
-            fi
+            for stack_name in "${STACKS[@]}"
+            do
+            if [[ "${stack_name}" =~ "${OldWorkflowID}" ]]
+              then
+                  aws cloudformation delete-stack --stack-name ${stack_name}
+              fi
+            done
 
 workflows:
   default:
