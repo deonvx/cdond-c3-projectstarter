@@ -492,9 +492,9 @@ jobs:
                 list-exports --query "Exports[?Name==\`WorkflowID\`].Value" \
                 --no-paginate --output text) >> $BASH_ENV
       - persist_to_workspace:
-          root: .
+          root: ~/
           paths:
-            - bash.env
+            - project/bash.env
       - run:
           name: Update cloudfront distribution
           command: |
@@ -515,7 +515,7 @@ jobs:
     steps:
       # Checkout code from git
       - attach_workspace:
-          at: .
+          at: ~/
       - run: |
           cat bash.env >> $BASH_ENV
       - checkout
