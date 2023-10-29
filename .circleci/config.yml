@@ -70,7 +70,6 @@ jobs:
   build-frontend:
     executor:
       name: node/default
-      tag: '18.2.0'
     steps:
       - checkout
       - run:
