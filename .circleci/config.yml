@@ -68,8 +68,9 @@ commands:
             
 jobs:
   build-frontend:
-    docker:
-      - image: node:18
+    executor:
+      name: node/default
+      tag: '13.8.0'
     steps:
       - checkout
       - restore_cache:
@@ -78,12 +79,8 @@ jobs:
           name: Build front-end
           command: |
             cd frontend
-            yarn
-            yarn upgrade
-            yarn add typescript@latest
-            yarn add @types/jest@latest
-            yarn add ts-jest@latest
-            yarn run build
+            npm install
+            npm run build
       - save_cache:
           paths: [frontend/node_modules]
           key: frontend-build
@@ -533,13 +530,17 @@ jobs:
       - run:
           name: Remove old stacks and files
           command: |
-            for stack_name in "${STACKS[@]}"
-            do
-            if [[ "${stack_name}" =~ "${OldWorkflowID}" ]]
-              then
-                  aws cloudformation delete-stack --stack-name ${stack_name}
-              fi
-            done
+            aws s3 rm s3://udapeople-${OldWorkflowID}  --recursive
+            aws cloudformation delete-stack --stack-name udapeople-frontend-${OldWorkflowID}
+            aws cloudformation delete-stack --stack-name udapeople-backend-${OldWorkflowID}
+
+            # for stack_name in "${STACKS[@]}"
+            # do
+            # if [[ "${stack_name}" =~ "${OldWorkflowID}" ]]
+            #   then
+            #       aws cloudformation delete-stack --stack-name ${stack_name}
+            #   fi
+            # done
 
 workflows:
   default:
