@@ -264,7 +264,6 @@ jobs:
               --output text >> .circleci/ansible/inventory.txt
             cat .circleci/ansible/inventory.txt
             # exit 1
-ol
       - persist_to_workspace:
           root: ~/
           paths:
