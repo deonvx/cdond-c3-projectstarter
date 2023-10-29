@@ -264,7 +264,7 @@ jobs:
               --output text >> .circleci/ansible/inventory.txt
             cat .circleci/ansible/inventory.txt
             # exit 1
-
+ol
       - persist_to_workspace:
           root: ~/
           paths:
@@ -523,13 +523,12 @@ jobs:
           name: Get old stack workflow id
           command: |
             # your code here
-            OldWorkflowID = $(cat OldWorkflowID)
+            OldWorkflowID=$(cat OldWorkflowID)
             echo OldWorkflowID: "${OldWorkflowID}"
             echo CIRCLE_WORKFLOW_ID "${CIRCLE_WORKFLOW_ID:0:7}"
             export STACKS=($(aws cloudformation list-stacks --query "StackSummaries[*].StackName" \
               --stack-status-filter CREATE_COMPLETE --no-paginate --output text)) 
-            echo Stack names: "${STACKS[@]}"   
-        
+            echo Stack names: "${STACKS[@]}"
       - run:
           name: Remove old stacks and files
           command: |
