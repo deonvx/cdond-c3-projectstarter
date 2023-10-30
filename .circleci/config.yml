@@ -94,6 +94,7 @@ jobs:
     #   - image: node:18
     executor:
       name: node/default
+      tag: '14.17'
     steps:
       - checkout
       - restore_cache:
@@ -117,7 +118,7 @@ jobs:
           name: Back-end build
           command: |
             cd backend
-            npm install --legacy-peer-deps
+            npm install
             npm run build
             cd ..
             tar -C backend -czvf artifact-backend.tar.gz .
