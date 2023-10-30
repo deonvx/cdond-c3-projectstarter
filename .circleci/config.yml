@@ -94,7 +94,6 @@ jobs:
     #   - image: node:18
     executor:
       name: node/default
-      tag: '14.17'
     steps:
       - checkout
       - restore_cache:
